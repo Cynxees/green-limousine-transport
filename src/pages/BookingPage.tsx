@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLinkClickHandler } from 'react-router-dom';
 import teslaImageS from '../assets/images/teslaModelS.png'
 import teslaImage3 from '../assets/images/teslaModel3.png'
 import Slider from 'react-slick';
@@ -7,9 +7,18 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { SlArrowRight } from "react-icons/sl";
 import { SlArrowLeft } from "react-icons/sl";
+import { FaCheck } from "react-icons/fa6";
+import PlacesAutocomplete from 'react-places-autocomplete';
+import {
+    geocodeByAddress,
+    geocodeByPlaceId,
+    getLatLng,
+  } from 'react-places-autocomplete';
+import AddressInput from '../components/AddressInput';
 
 const StepForm = () => {
     const [step, setStep] = useState(1);
+    const [address, setAddress] = useState("");
     const [formData, setFormData] = useState({
         name: '',
         pickup: '',
@@ -24,13 +33,14 @@ const StepForm = () => {
 
     const NextArrow = ({ onClick }) => (
     
-        <SlArrowRight className="absolute block top-1/2 text-white z-20 right-5  md:right-40 " size={20} onClick={onClick} />
+        <SlArrowRight className="absolute block top-1/2 text-white z-20 right-5  md:right-40 cursor-pointer" size={20} onClick={onClick} />
   
     );
   
     const PrevArrow = ({ onClick }) => (
-        <SlArrowLeft className="absolute block top-1/2 text-white z-20 left-5 md:left-40" size={20} onClick={onClick} />
+        <SlArrowLeft className="absolute block top-1/2 text-white z-20 left-5 md:left-40 cursor-pointer" size={20} onClick={onClick} />
     );
+
 
     const carouselSettings = {
         dots: true,
@@ -39,8 +49,8 @@ const StepForm = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: false,
-        nextArrow: <NextArrow  />,
-        prevArrow: <PrevArrow  />
+        nextArrow: <NextArrow onClick={undefined}  />,
+        prevArrow: <PrevArrow onClick={undefined}  />
     };
 
     const [currentSlideNumber, setCurrentSlideNumber] = useState(0);
@@ -105,27 +115,203 @@ const StepForm = () => {
         setStep(2);
 
     }
+
+    const handleClickNavigate = (e) => {
+    
+        if(e.target.id == "nav-1"){
+            setStep(1);
+        }else if(e.target.id == "nav-2"){
+            setStep(2);
+        }else if(e.target.id == "nav-3"){
+            setStep(3);
+        }else if(e.target.id == "nav-4"){
+            setStep(4);
+        }
+    
+    }
+
+
+    const handlePickupSelect = async (value: string) => {
+        const results = await geocodeByAddress(value);
+        const latLng = await getLatLng(results[0]);
+        console.log(latLng);
+    };
+
+    const handlePickupChange = (value: string) => {
+        setFormData(prev => ({
+            ...prev,
+            ['pickup']: value 
+        }));
+    };
+
+    const handleDestinationSelect = async (value: string) => {
+        const results = await geocodeByAddress(value);
+        const latLng = await getLatLng(results[0]);
+        console.log(latLng);
+    };
+
+    const handleDestinationChange = (value: string) => {
+        setFormData(prev => ({
+            ...prev,
+            ['destination']: value 
+        }));
+    };
+
+    const searchOptions = {
+        location: new window.google.maps.LatLng(-33.8688, 151.2093), // Coordinates of Sydney
+        radius: 20000, // 20 kilometers around the city 
+        types: ['address']
+      };
   
+    const selectedTextClass = "text-green-100"
+    const selectedIconClass = "border-green-200 border"
+    
+    const finishedTextClass = "text-green-300"
+    const finishedIconClass = "bg-green-700 "
+
+    const defaultTextClass = "text-gray-400"
+    const defaultIconClass = "border-gray-400 border"
 
   return (
     <div className="w-full h-full flex items-center justify-center bg-gray-950 font-sans flex-col">
         
+        <ol className="items-center w-full flex justify-center mb-10 text-start space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse font-[sans-serif]">
+            <li className={`${(step > 1)? finishedTextClass : (step == 1)?  selectedTextClass : defaultTextClass } flex items-center space-x-2.5 rtl:space-x-reverse`}>
+                <span className={`${(step > 1)? finishedIconClass : (step == 1)?  selectedIconClass : defaultIconClass } flex items-center justify-center w-8 h-8 rounded-full shrink-0 `}>
+                    {(step > 1) ? <FaCheck id='nav-1' onClick={handleClickNavigate} className='text-white'></FaCheck> : 1}
+                </span>
+                <span>
+                    <h3 className="font-medium leading-tight">User info</h3>
+                    <p className="text-sm">Step details here</p>
+                </span>
+            </li>
+            <li className={`${(step > 2)? finishedTextClass : (step == 2)?  selectedTextClass : defaultTextClass } flex items-center  space-x-2.5 rtl:space-x-reverse `}>
+                <span className={`${(step > 2)? finishedIconClass : (step == 2)?  selectedIconClass : defaultIconClass } flex items-center justify-center w-8 h-8  rounded-full shrink-0 `}>
+                {(step > 2) ? <FaCheck id='nav-2' onClick={handleClickNavigate} className='text-white'></FaCheck> : 2}
+                </span>
+                <span>
+                    <h3 className="font-medium leading-tight">Company info</h3>
+                    <p className="text-sm">Step details here</p>
+                </span>
+            </li>
+            <li className={`${(step > 3)? finishedTextClass : (step == 3)?  selectedTextClass : defaultTextClass } flex items-center space-x-2.5 rtl:space-x-reverse `}>
+                <span className={`${(step > 3)? finishedIconClass : (step == 3)?  selectedIconClass : defaultIconClass } flex items-center justify-center w-8 h-8  rounded-full shrink-0 `}>
+                {(step > 3) ? <FaCheck id='nav-3' onClick={handleClickNavigate} className='text-white'></FaCheck> : 3}
+                </span>
+                <span>
+                    <h3 className="font-medium leading-tight">Payment info</h3>
+                    <p className="text-sm">Step details here</p>
+                </span>
+            </li>
+            <li className={`${(step > 4)? finishedTextClass : (step == 4)?  selectedTextClass : defaultTextClass } flex items-center space-x-2.5 rtl:space-x-reverse `}>
+                <span className={`${(step > 4)? finishedIconClass : (step == 4)?  selectedIconClass : defaultIconClass } flex items-center justify-center w-8 h-8 rounded-full shrink-0 `}>
+                {(step > 4) ? <FaCheck id='nav-4' onClick={handleClickNavigate} className='text-white'></FaCheck> : 4}
+                </span>
+                <span>
+                    <h3 className="font-medium leading-tight">Payment info</h3>
+                    <p className="text-sm">Step details here</p>
+                </span>
+            </li>
+        </ol>
+
         
         
         {step === 1 && (
-          <div className="w-full h-full flex items-center justify-center font-[sans-serif]">
+          <div className="w-full flex items-center justify-center font-[sans-serif]">
 
 
-          <div className="w-10/12 md:w-5/12 rounded-lg bg-white shadow-xl py-10 px-5 flex flex-col items-start">
+          <div className="w-10/12 lg:w-5/12 rounded-lg bg-white shadow-xl py-10 px-5 flex flex-col items-start">
 
           <h2 className='font-vag text-3xl text-center justify-center w-full mb-5'>Booking Details</h2>
 
           <label className="block text-sm font-bold mb py-1 text-start" htmlFor="pickup">Pickup Address</label>
-          <input className="bg-white shadow appearance-none justify-start self-center border rounded mb-5 px-3 py-2 w-full text-gray-700" id="pickup" name="pickup" type="text" placeholder="Enter Full Address" value={formData.pickup} onChange={handleChange} />
-          
+         <PlacesAutocomplete
+            value={formData.pickup}
+            onChange={handlePickupChange}
+            onSelect={handlePickupSelect}
+            searchOptions={searchOptions}
+
+            >
+            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                <div className='w-full text-start'>
+                <input
+                    {...getInputProps({
+                    placeholder: 'Enter Full Address',
+                    className: 'location-search-input bg-white shadow appearance-none justify-start self-center border rounded mb-5 px-3 py-2 w-full text-gray-700',
+                    })}
+                />
+                <div className="autocomplete-dropdown-container absolute lg:w-[39vw] w-[80vw]">
+                    {loading && <div>Loading...</div>}
+                    {suggestions.map(suggestion => {
+
+
+                    const style = suggestion.active
+                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                    return (
+                        <div
+                        {...getSuggestionItemProps(suggestion, {
+                            className: suggestion.active ? 'suggestion-item--active w-full border' : 'suggestion-item w-full',
+                            style,
+                        })}
+                        className=''
+                        >
+                        <span>{suggestion.description}</span>
+                        <div className='w-full bg-gray-200 h-0.5'>
+                            
+                        </div>
+                        
+                        </div>
+                    );
+                    })}
+                </div>
+                </div>
+            )}
+        </PlacesAutocomplete>
           <label className="block text-sm font-bold mb py-1 text-start" htmlFor="destination">Destination Address</label>
-          <input className="bg-white shadow appearance-none justify-start self-center border rounded mb-5 px-3 py-2 w-full text-gray-700" id="destination" name="destination" type="text" placeholder="Enter Full Address" value={formData.destination} onChange={handleChange} />
-          
+          <PlacesAutocomplete
+            value={formData.destination}
+            onChange={handleDestinationChange}
+            onSelect={handleDestinationSelect}
+            searchOptions={searchOptions}
+
+            >
+            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                <div className='w-full text-start'>
+                <input
+                    {...getInputProps({
+                    placeholder: 'Enter Full Address',
+                    className: 'location-search-input bg-white shadow appearance-none justify-start self-center border rounded mb-5 px-3 py-2 w-full text-gray-700',
+                    })}
+                />
+                <div className="autocomplete-dropdown-container absolute lg:w-[39vw] w-[80vw]">
+                    {loading && <div>Loading...</div>}
+                    {suggestions.map(suggestion => {
+
+
+                    const style = suggestion.active
+                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                    return (
+                        <div
+                        {...getSuggestionItemProps(suggestion, {
+                            className: suggestion.active ? 'suggestion-item--active w-full border' : 'suggestion-item w-full',
+                            style,
+                        })}
+                        className=''
+                        >
+                        <span>{suggestion.description}</span>
+                        <div className='w-full bg-gray-200 h-0.5'>
+                            
+                        </div>
+                        
+                        </div>
+                    );
+                    })}
+                </div>
+                </div>
+            )}
+        </PlacesAutocomplete>
           <div className="w-full flex">
 
               <div className="w-7/12">
@@ -154,7 +340,7 @@ const StepForm = () => {
         )}
         {step === 2 && (
             
-        <div className="w-full h-full  font-[sans-serif] items-center flex flex-col">
+        <div className="w-full font-[sans-serif] items-center flex flex-col">
 
         {step === 2 && (
             <div className="w-full flex flex-col align-middle items-center my-auto font-vag ">
@@ -164,11 +350,11 @@ const StepForm = () => {
                 {cars.map(car => {
 
                     return(
-                        <div className='items-center flex flex-col justify-center content-center text-gray-200'>
+                        <div className='items-center flex flex-col justify-center content-center text-gray-200' key={car.name}>
                     
                             <h1>{car.name}</h1>
-                            <img src={car.image} alt="" className='mx-auto my-10'/>
                             <h2>From: ${car.price}</h2>
+                            <img src={car.image} alt="" className='mx-auto my-10'/>
 
                         </div>
                     )}
@@ -184,7 +370,7 @@ const StepForm = () => {
             
         )}
         {step === 3 && (
-          <div className="w-full h-full flex items-center justify-center font-[sans-serif]">
+          <div className="w-full flex items-center justify-center font-[sans-serif]">
 
 
           <div className="w-10/12 md:w-5/12 rounded-lg bg-white shadow-xl py-10 px-5 flex flex-col items-start">
@@ -208,7 +394,7 @@ const StepForm = () => {
         )}
 
         {step === 4 && (
-          <div className="w-full h-full flex items-center justify-center font-[sans-serif]">
+          <div className="w-full flex items-center justify-center font-[sans-serif]">
 
 
           <div className="w-10/12 md:w-5/12 rounded-lg bg-white shadow-xl py-10 px-5 flex flex-col items-start">
