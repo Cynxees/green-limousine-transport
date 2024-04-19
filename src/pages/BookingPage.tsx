@@ -163,11 +163,11 @@ const StepForm = () => {
         types: ['address']
       };
   
-    const selectedTextClass = "text-green-100"
-    const selectedIconClass = "border-green-200 border"
+    const selectedTextClass = "text-red-100"
+    const selectedIconClass = "border-red-200 border"
     
-    const finishedTextClass = "text-green-300"
-    const finishedIconClass = "bg-green-700 "
+    const finishedTextClass = "text-red-300"
+    const finishedIconClass = "bg-red-700 "
 
     const defaultTextClass = "text-gray-400"
     const defaultIconClass = "border-gray-400 border"
@@ -175,14 +175,13 @@ const StepForm = () => {
   return (
     <div className="w-full h-full flex items-center justify-center bg-gray-950 font-sans flex-col">
         
-        <ol className="items-center w-full flex justify-center mb-10 text-start space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse font-[sans-serif]">
+        <ol className="items-center w-full flex justify-center mb-10 text-start space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse font-[sans-serif] items-center">
             <li className={`${(step > 1)? finishedTextClass : (step == 1)?  selectedTextClass : defaultTextClass } flex items-center space-x-2.5 rtl:space-x-reverse`}>
                 <span className={`${(step > 1)? finishedIconClass : (step == 1)?  selectedIconClass : defaultIconClass } flex items-center justify-center w-8 h-8 rounded-full shrink-0 `}>
                     {(step > 1) ? <FaCheck id='nav-1' onClick={handleClickNavigate} className='text-white'></FaCheck> : 1}
                 </span>
                 <span>
-                    <h3 className="font-medium leading-tight">User info</h3>
-                    <p className="text-sm">Step details here</p>
+                    <h3 className="text-sm leading-tight">Address Info</h3>
                 </span>
             </li>
             <li className={`${(step > 2)? finishedTextClass : (step == 2)?  selectedTextClass : defaultTextClass } flex items-center  space-x-2.5 rtl:space-x-reverse `}>
@@ -190,8 +189,7 @@ const StepForm = () => {
                 {(step > 2) ? <FaCheck id='nav-2' onClick={handleClickNavigate} className='text-white'></FaCheck> : 2}
                 </span>
                 <span>
-                    <h3 className="font-medium leading-tight">Company info</h3>
-                    <p className="text-sm">Step details here</p>
+                    <h3 className="text-sm leading-tight">Pick Your Car</h3>
                 </span>
             </li>
             <li className={`${(step > 3)? finishedTextClass : (step == 3)?  selectedTextClass : defaultTextClass } flex items-center space-x-2.5 rtl:space-x-reverse `}>
@@ -199,17 +197,15 @@ const StepForm = () => {
                 {(step > 3) ? <FaCheck id='nav-3' onClick={handleClickNavigate} className='text-white'></FaCheck> : 3}
                 </span>
                 <span>
-                    <h3 className="font-medium leading-tight">Payment info</h3>
-                    <p className="text-sm">Step details here</p>
+                    <h3 className="text-sm leading-tight">Passenger Info</h3>
                 </span>
             </li>
-            <li className={`${(step > 4)? finishedTextClass : (step == 4)?  selectedTextClass : defaultTextClass } flex items-center space-x-2.5 rtl:space-x-reverse `}>
+            <li className={`${(step > 4)? finishedTextClass : (step == 4)?  selectedTextClass : defaultTextClass } flex items-center rtl:space-x-reverse `}>
                 <span className={`${(step > 4)? finishedIconClass : (step == 4)?  selectedIconClass : defaultIconClass } flex items-center justify-center w-8 h-8 rounded-full shrink-0 `}>
                 {(step > 4) ? <FaCheck id='nav-4' onClick={handleClickNavigate} className='text-white'></FaCheck> : 4}
                 </span>
                 <span>
-                    <h3 className="font-medium leading-tight">Payment info</h3>
-                    <p className="text-sm">Step details here</p>
+                    <h3 className="text-sm leading-tight">Review Booking</h3>
                 </span>
             </li>
         </ol>
@@ -325,14 +321,14 @@ const StepForm = () => {
                   
                   <label className="block text-sm font-bold mb py-1 text-start" htmlFor="destination">Time</label>
                   <input 
-                  className="shadow appearance-none justify-start self-center border rounded ps-3 py-2 w-full bg-green-700 text-white" id="time" name="time" 
+                  className="shadow appearance-none justify-start self-center border rounded ps-3 py-2 w-full bg-red-700 text-white" id="time" name="time" 
                   type="time" value={formData.time} onChange={handleChange}/>
       
               </div>
 
           </div>
 
-            <button onClick={handleSubmitStep1} type="submit" className="w-full transform transition duration-500 text-white bg-green-600 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 self-center text-1xl rounded-xl  px-5 my-10 py-2.5 text-center me-2 mb-2">Get Quote </button>
+            <button onClick={handleSubmitStep1} type="submit" className="w-full transform transition duration-500 text-white bg-red-600 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 self-center text-1xl rounded-xl  px-5 my-10 py-2.5 text-center me-2 mb-2">Get Quote </button>
 
           </div>
           
@@ -362,7 +358,7 @@ const StepForm = () => {
                 )}
 
             </Slider>
-            <button className="bg-green-600 hover:bg-green-800 text-white px-4 mt-10 rounded" onClick={handleChooseCar}>Choose Car</button>
+            <button className="bg-red-600 hover:bg-red-800 text-white px-4 mt-10 rounded" onClick={handleChooseCar}>Choose Car</button>
             </div>
         )}
             
@@ -386,7 +382,7 @@ const StepForm = () => {
             <label className="block text-sm font-bold mb py-1 text-start" htmlFor="passengers">Number of Passengers</label>
             <input className="bg-white shadow appearance-none border rounded px-3 py-2 w-full text-gray-700" id="passengers" type="number" placeholder="Number of Passengers" name="passengers" value={formData.passengers} onChange={handleChange} />
             
-            <button onClick={handleSubmit} type="submit" className="w-full transform transition duration-500 text-white bg-green-600 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 self-center text-1xl rounded-xl  px-5 my-10 py-2.5 text-center me-2 mb-2">Review Booking Details</button>
+            <button onClick={handleSubmit} type="submit" className="w-full transform transition duration-500 text-white bg-red-600 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 self-center text-1xl rounded-xl  px-5 my-10 py-2.5 text-center me-2 mb-2">Review Booking Details</button>
 
           
           </div>
@@ -429,7 +425,7 @@ const StepForm = () => {
 
             </div>
             
-            <button onClick={handleSubmit} type="submit" className="w-full transform transition duration-500 text-white bg-green-600 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 self-center text-1xl rounded-xl  px-5 my-10 py-2.5 text-center me-2 mb-2 font-vag">Book Now!!</button>
+            <button onClick={handleSubmit} type="submit" className="w-full transform transition duration-500 text-white bg-red-600 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 self-center text-1xl rounded-xl  px-5 my-10 py-2.5 text-center me-2 mb-2 font-vag">Book Now</button>
 
           
         
@@ -440,8 +436,8 @@ const StepForm = () => {
         )}
         {/* <div className="flex space-x-4 mt-4">
           {step > 1 && <button className="btn bg-gray-500 text-white px-4 py-2 rounded" onClick={handleBack}>Back</button>}
-          {step < 4 && <button className="btn bg-blue-500 text-white px-4 py-2 rounded" onClick={handleNext}>Next</button>}
-          {step === 4 && <button className="btn bg-green-600 hover:bg-green-800 text-white px-4 py-2 rounded" onClick={handleSubmit}>Submit</button>}
+          {step < 4 && <button className="btn bg-red-500 text-white px-4 py-2 rounded" onClick={handleNext}>Next</button>}
+          {step === 4 && <button className="btn bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded" onClick={handleSubmit}>Submit</button>}
         </div> */}
     </div>
   );

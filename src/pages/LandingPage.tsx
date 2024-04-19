@@ -5,34 +5,59 @@ import video from '../assets/videos/teslaCinematic.mp4'
 export default function LandingPage() {
     return (
 
-        <header className="relative flex items-center justify-center h-full w-full overflow-hidden">
-            <div className="relative z-30">
+        <div>
+        <header className="relative flex justify-center h-screen w-full ">
+            <div className="relative z-30 flex flex-col mt-[50vh]">
                 
-                <h1 className="inline bg-gradient-to-br from-green-300 to-green-500 text-transparent bg-clip-text text-5xl">GREEN </h1>
-                <h1 className="text-3xl text-white md:text-4xl">LIMOUSINE TRANSPORT</h1>
+                <div className='relative'>
+
+                <h1 className="inline bg-gradient-to-br from-red-400 to-red-500 text-transparent bg-clip-text text-5xl">BEVERLY HILLS </h1>
+                <h1 className="text-3xl text-white md:text-4xl mb-10">LIMOUSINE TRANSPORT</h1>
+
+                <div className="font-extrabold text-3xl  overflow-hidden text-red-100 motion-safe:animate-pulse ">
+                <span className=" inline-flex flex-col h-[calc(theme(fontSize.3xl)*theme(lineHeight.tight))] overflow-hidden">
+                <ul className="block  text-center  [&_li]:block text-3xl animate-text-slide">
+                    <li className=''>30 Years of Experience</li>
+                    <li>Competitive Service</li>
+                    <li>Eco friendly vehicles</li>
+                    <li>Clean and Hygienic</li>
+                    <li>Accepts credit cards payments</li>
+                    <li aria-hidden="true">30 Years of Experience</li>
+                </ul>
+                </span>
+                </div>
+
+
+                </div>
+
     
     
                 <Link to='/booking'>
-                <button type="button" className="hover:scale-125  transform transition duration-500 text-white bg-gradient-to-br from-green-700 to-green-800 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 w-2/3 self-center text-1xl rounded-xl  px-5 my-10 py-2.5 text-center me-2 mb-2">BOOK NOW</button>
+                <button type="button" className="hover:scale-125 transform transition duration-500 text-white bg-gradient-to-br shadow-lg shadow-black from-red-600 to-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 w-2/3 self-center text-1xl rounded-md  px-5 my-10 py-2.5 text-center me-2 mb-2">BOOK NOW</button>
                 </Link>
+                
+
+
             </div>
+            
+            <div className='absolute -z-10 w-screen h-screen'>
+
+
             <video
                 autoPlay
                 loop
                 muted
-                className="absolute z-10 min-w-full min-h-full max-w-none max-h-none brightness-50 object-fit"
-            >
-                <source
-                src={video}
-                type="video/mp4"
-                className=''
-                />
-                Your browser does not support the video tag.
-            </video>
+                className="absolute -z-10 object-cover min-h-full min-w-full bg-black brightness-50 "
+                src= {video}
+                
+            />
 
+            </div>
             
 
         </header>
+
+        </div>
 
 
     )
