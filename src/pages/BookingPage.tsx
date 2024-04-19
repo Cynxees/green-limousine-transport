@@ -5,76 +5,88 @@ import teslaImage3 from '../assets/images/teslaModel3.png'
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { SlArrowRight } from "react-icons/sl";
+import { SlArrowLeft } from "react-icons/sl";
 
 const StepForm = () => {
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    name: '',
-    pickup: '',
-    destination: '',
-    date: '',
-    time: '',
-    carType: '',
-    baggage: '',
-    passengers: '',
-    price: 0
-  });
+    const [step, setStep] = useState(1);
+    const [formData, setFormData] = useState({
+        name: '',
+        pickup: '',
+        destination: '',
+        date: '',
+        time: '',
+        carType: '',
+        baggage: '',
+        passengers: '',
+        price: 0
+    });
 
-  const carouselSettings = {
-    dots: true,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: false,
-  };
-
-  const [currentSlideNumber, setCurrentSlideNumber] = useState(0);
-
-  const cars = [
-    { name: 'Tesla Model S', image: teslaImageS, price: 100 },
-    { name: 'Tesla Model 3', image: teslaImage3, price: 80 },
-  ];
-
-  const handleNext = () => {
-    if (step < 4) {
-      setStep(step + 1);
-    }
-  };
-
-  const handleBack = () => {
-    if (step > 1) {
-      setStep(step - 1);
-    }
-
-    console.log(formData)
-  };
-
-
-
-
-  const handleSubmit = (e) => {
+    const NextArrow = ({ onClick }) => (
     
-    e.preventDefault();
-    console.log(formData);
-    setStep(4);
+        <SlArrowRight className="absolute block top-1/2 text-white z-20 right-5  md:right-40 " size={20} onClick={onClick} />
+  
+    );
+  
+    const PrevArrow = ({ onClick }) => (
+        <SlArrowLeft className="absolute block top-1/2 text-white z-20 left-5 md:left-40" size={20} onClick={onClick} />
+    );
 
-  };
+    const carouselSettings = {
+        dots: true,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: false,
+        nextArrow: <NextArrow  />,
+        prevArrow: <PrevArrow  />
+    };
 
-  const handleChange = (e) => {
-    
-    const { name, value } = e.target; 
-    
-    console.log("handlechange", name, value, e)
-    
-    setFormData(prev => ({
-      ...prev,
-      [name]: value 
-    }));
-  };
+    const [currentSlideNumber, setCurrentSlideNumber] = useState(0);
 
-  const handleChooseCar = (e) => {
-    
+    const cars = [
+        { name: 'Tesla Model S', image: teslaImageS, price: 100 },
+        { name: 'Tesla Model 3', image: teslaImage3, price: 80 },
+    ];
+
+    const handleNext = () => {
+        if (step < 4) {
+            setStep(step + 1);
+        }
+    };
+
+    const handleBack = () => {
+        if (step > 1) {
+        setStep(step - 1);
+        }
+
+        console.log(formData)
+    };
+
+
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+        console.log(formData);
+        setStep(4);
+
+    };
+
+    const handleChange = (e) => {
+
+        const { name, value } = e.target; 
+
+        console.log("handlechange", name, value, e)
+
+        setFormData(prev => ({
+            ...prev,
+            [name]: value 
+        }));
+    };
+
+    const handleChooseCar = (e) => {
+
     var chosenCar = cars[currentSlideNumber]
 
     setFormData(prev => ({
@@ -84,15 +96,16 @@ const StepForm = () => {
     }));
     setStep(3);
 
-    
-  };
 
-  const handleSubmitStep1 = (e) => {
+    };
 
-    e.preventDefault()
-    setStep(2);
+    const handleSubmitStep1 = (e) => {
 
-  }
+        e.preventDefault()
+        setStep(2);
+
+    }
+  
 
   return (
     <div className="w-full h-full flex items-center justify-center bg-gray-950 font-sans flex-col">
