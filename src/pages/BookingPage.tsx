@@ -132,9 +132,10 @@ const StepForm = () => {
 
 
     const handlePickupSelect = async (value: string) => {
-        const results = await geocodeByAddress(value);
-        const latLng = await getLatLng(results[0]);
-        console.log(latLng);
+        setFormData(prev => ({
+            ...prev,
+            ['pickup']: value
+        }));
     };
 
     const handlePickupChange = (value: string) => {
@@ -145,9 +146,11 @@ const StepForm = () => {
     };
 
     const handleDestinationSelect = async (value: string) => {
-        const results = await geocodeByAddress(value);
-        const latLng = await getLatLng(results[0]);
-        console.log(latLng);
+        setFormData(prev => ({
+            ...prev,
+            ['destination']: value
+        }));
+
     };
 
     const handleDestinationChange = (value: string) => {
@@ -175,7 +178,7 @@ const StepForm = () => {
   return (
     <div className="w-full h-full flex items-center justify-center bg-gray-950 font-sans flex-col">
         
-        <ol className="items-center w-full flex justify-center mb-10 text-start space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse font-[sans-serif] items-center">
+        <ol className="w-full flex justify-center mb-10 text-start space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse font-[sans-serif] items-center">
             <li className={`${(step > 1)? finishedTextClass : (step == 1)?  selectedTextClass : defaultTextClass } flex items-center space-x-2.5 rtl:space-x-reverse`}>
                 <span className={`${(step > 1)? finishedIconClass : (step == 1)?  selectedIconClass : defaultIconClass } flex items-center justify-center w-8 h-8 rounded-full shrink-0 `}>
                     {(step > 1) ? <FaCheck id='nav-1' onClick={handleClickNavigate} className='text-white'></FaCheck> : 1}

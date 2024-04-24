@@ -16,7 +16,7 @@ export default function LandingPage() {
 
                 <div className="font-extrabold text-3xl  overflow-hidden text-red-100 motion-safe:animate-pulse ">
                 <span className=" inline-flex flex-col h-[calc(theme(fontSize.3xl)*theme(lineHeight.tight))] overflow-hidden">
-                <ul className="block  text-center  [&_li]:block text-3xl animate-text-slide">
+                <ul className="block  text-center  [&_li]:block text-2xl md:text-3xl animate-text-slide">
                     <li className=''>30 Years of Experience</li>
                     <li>Competitive Service</li>
                     <li>Eco friendly vehicles</li>
