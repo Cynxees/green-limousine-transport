@@ -7,7 +7,7 @@ export default function LandingPage() {
 
         <div>
         <header className="relative flex justify-center h-screen w-full ">
-            <div className="relative z-30 flex flex-col mt-[50vh]">
+            <div className="relative z-30 flex flex-col my-auto">
                 
                 <div className='relative'>
 
