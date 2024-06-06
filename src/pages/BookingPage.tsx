@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useLinkClickHandler } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLinkClickHandler, useNavigate } from 'react-router-dom';
 import teslaImageS from '../assets/images/teslaModelS.png'
 import teslaImage3 from '../assets/images/teslaModel3.png'
 import Slider from 'react-slick';
@@ -18,6 +18,7 @@ import AddressInput from '../components/AddressInput';
 
 const StepForm = () => {
     const [step, setStep] = useState(1);
+    const navigate = useNavigate()
     const [address, setAddress] = useState("");
     const [formData, setFormData] = useState({
         name: '',
@@ -30,6 +31,19 @@ const StepForm = () => {
         passengers: '',
         price: 0
     });
+    const [formDataError, setFormDataError] = useState({
+        name: '',
+        pickup: '',
+        destination: '',
+        date: '',
+        time: '',
+        carType: '',
+        baggage: '',
+        passengers: '',
+        price: ''
+    });
+
+    const defaultErrorText = "Please Fill in your "
 
     const NextArrow = ({ onClick }) => (
     
@@ -81,6 +95,23 @@ const StepForm = () => {
         console.log(formData);
         setStep(4);
 
+        const link = "https://wa.me/+61422809168?text=Hi,%20I'm%20" + formData.name +"%20and%20I%20want%20to%20book%20a%20transport%0a%0a========================%0a*DETAILS*%0a========================%0aName:%20"
+        +formData.name
+        +"%0aCar%20Type:%20" + formData.carType
+        +"%0aPickup:%20"+formData.pickup
+        +"%0aDestination:%20"+formData.destination
+        +"%0aDate:%20"+formData.date
+        +"%0aTime:%20"+formData.time
+        +"%0a%0aPassengers:%20"+formData.passengers
+        +"%0aBaggages:%20"+formData.baggage
+        +"%0a========================"
+        
+
+        
+
+
+        window.open(link, '_blank')
+
     };
 
     const handleChange = (e) => {
@@ -109,10 +140,96 @@ const StepForm = () => {
 
     };
 
+    useEffect(() =>{
+        
+        console.warn('hi')
+
+    }, [formDataError.pickup])
+
+
+    const clearErrorText = () => {
+
+        setFormDataError((old) => ({
+            name: '',
+            pickup: '',
+            destination: '',
+            date: '',
+            time: '',
+            carType: '',
+            baggage: '',
+            passengers: '',
+            price: ''
+
+
+        }));
+
+
+
+    }
+
+    const validationCheck = (type, errorText) => {
+
+
+        if(formData[type].length < 1){
+
+            setFormDataError((old) => ({
+                ...old,
+                [type]: defaultErrorText + errorText
+            }));
+
+            
+            return true
+        }
+
+        return false
+
+
+    };
+
     const handleSubmitStep1 = (e) => {
 
         e.preventDefault()
-        setStep(2);
+
+        clearErrorText()
+        let haveError = false
+
+
+        let temp = validationCheck('pickup', "Pickup Address")
+        if(temp) haveError = true
+
+        
+        temp = validationCheck('destination', "Destination Address")
+        if(temp) haveError = true
+        
+
+        temp = validationCheck('date', "Date")
+        if(temp) haveError = true
+
+        temp = validationCheck('time', "Time")
+        if(temp) haveError = true
+
+        if(!haveError)setStep(2);
+
+    }
+
+    const handleSubmitStep3 = (e) => {
+
+        e.preventDefault()
+        clearErrorText()
+        let haveError = false
+
+
+        let temp = validationCheck('name', "Name")
+        if(temp) haveError = true
+
+        temp = validationCheck('baggage', "Baggage Count")
+        if(temp) haveError = true        
+
+        temp = validationCheck('passengers', "Passengers Count")
+        if(temp) haveError = true
+
+
+        if(!haveError) setStep(4);
 
     }
 
@@ -239,6 +356,7 @@ const StepForm = () => {
                     className: 'location-search-input bg-white shadow appearance-none justify-start self-center border rounded mb-5 px-3 py-2 w-full text-gray-700',
                     })}
                 />
+                <div className='text-red-500'>{formDataError.pickup}</div>
                 <div className="autocomplete-dropdown-container absolute lg:w-[39vw] w-[80vw]">
                     {loading && <div>Loading...</div>}
                     {suggestions.map(suggestion => {
@@ -311,12 +429,14 @@ const StepForm = () => {
                 </div>
             )}
         </PlacesAutocomplete>
+                <div className='text-red-500'>{formDataError.destination}</div>
           <div className="w-full flex">
 
               <div className="w-7/12">
                   
                   <label className="block text-sm font-bold mb py-1 text-start" htmlFor="destination">Date</label>
                   <input className="bg-white shadow appearance-none justify-start self-center border rounded px-3 py-2 w-full text-gray-700" id="date" type="date" name="date" value={formData.date} onChange={handleChange} />
+                
       
               </div>
               
@@ -330,6 +450,8 @@ const StepForm = () => {
               </div>
 
           </div>
+          <div className='text-red-500'>{formDataError.date}</div>
+          <div className='text-red-500'>{formDataError.time}</div>
 
             <button onClick={handleSubmitStep1} type="submit" className="w-full transform transition duration-500 text-white bg-red-600 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 self-center text-1xl rounded-xl  px-5 my-10 py-2.5 text-center me-2 mb-2">Get Quote </button>
 
@@ -378,14 +500,17 @@ const StepForm = () => {
             <label className="block text-sm font-bold mb py-1 text-start" htmlFor="baggage">Name</label>
             <input className="bg-white shadow appearance-none border rounded mb-5 px-3 py-2 w-full text-gray-700" id="baggage" type="text" placeholder="Your Name" name="name" value={formData.name} onChange={handleChange} />
 
+            <div className='text-red-500'>{formDataError.name}</div>
             
             <label className="block text-sm font-bold mb py-1 text-start" htmlFor="baggage">Baggage Count</label>
             <input className="bg-white shadow appearance-none border rounded mb-5 px-3 py-2 w-full text-gray-700" id="baggage" type="number" placeholder="Number of Bags" name="baggage" value={formData.baggage} onChange={handleChange} />
 
+            <div className='text-red-500'>{formDataError.baggage}</div>
             <label className="block text-sm font-bold mb py-1 text-start" htmlFor="passengers">Number of Passengers</label>
             <input className="bg-white shadow appearance-none border rounded px-3 py-2 w-full text-gray-700" id="passengers" type="number" placeholder="Number of Passengers" name="passengers" value={formData.passengers} onChange={handleChange} />
             
-            <button onClick={handleSubmit} type="submit" className="w-full transform transition duration-500 text-white bg-red-600 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 self-center text-1xl rounded-xl  px-5 my-10 py-2.5 text-center me-2 mb-2">Review Booking Details</button>
+            <div className='text-red-500'>{formDataError.passengers}</div>
+            <button onClick={handleSubmitStep3} type="submit" className="w-full transform transition duration-500 text-white bg-red-600 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 self-center text-1xl rounded-xl  px-5 my-10 py-2.5 text-center me-2 mb-2">Review Booking Details</button>
 
           
           </div>
